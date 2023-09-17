@@ -7,7 +7,7 @@ import argparse
 signature_7z = b"\x37\x7a\xbc\xaf\x27\x1c"
 
 def main(file, out):
-	
+	result = 0
 	with open(file, "rb") as rf:
 		n = 0
 		block = rf.read(1) 
@@ -17,7 +17,7 @@ def main(file, out):
 			if block[0] == signature_7z[0]:
 				block = rf.read(len(signature_7z) - 1)
 				if block == signature_7z[1:]:
-					seek = n
+					result += n
 					print(f"[+] Found 7z signature at {hex(n)}!")
 					break
 				n += len(signature_7z) - 1
@@ -25,7 +25,7 @@ def main(file, out):
 				n += 1
 				block = rf.read(1)
 		
-		if not seek:
+		if result == 0:
 			print("No 7z signature found.")
 			
 		else:		
